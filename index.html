@@ -72,15 +72,29 @@
 
   <script>
     const form = document.getElementById('wifiForm');
+    const response = document.getElementById('response');
+
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const pw = document.getElementById('wifiPassword').value;
-      const res = await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: pw })
-      });
-      console.log(await res.json());
+
+      try {
+        const res = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pw })
+        });
+
+        const data = await res.json();
+        console.log(data);
+
+        // Show success message to user
+        response.innerText = 'Form submitted successfully!';
+        form.reset();
+      } catch (err) {
+        response.innerText = 'Error submitting form.';
+        console.error(err);
+      }
     });
   </script>
 </body>
